@@ -3,24 +3,36 @@ index 00ca366d73..242ca4a24f 100644
 --- a/rts/Map/BasicMapDamage.cpp
 +++ b/rts/Map/BasicMapDamage.cpp
 @@ -234,6 +234,8 @@ void CBasicMapDamage::RecalcArea(int x1, int x2, int y1, int y2, bool firstCall)
- 	x1 = std::max(x1, 0); x2 = std::clamp(x2, x1, mapDims.mapx);
- 	y1 = std::max(y1, 0); y2 = std::clamp(y2, y1, mapDims.mapy);
+        x1 = std::max(x1, 0); x2 = std::clamp(x2, x1, mapDims.mapx);
+        y1 = std::max(y1, 0); y2 = std::clamp(y2, y1, mapDims.mapy);
  
-+	LOG_L(L_WARNING, "RecalcArea %d %d %d %d", x1, y1, x2, y2);
++       LOG_L(L_WARNING, "RecalcArea %d %d %d %d", x1, y1, x2, y2);
 +
- 	// do not bother with zero-area updates
- 	const SRectangle updRect(x1, y1, x2, y2);
- 	if (updRect.GetArea() <= 0)
+        // do not bother with zero-area updates
+        const SRectangle updRect(x1, y1, x2, y2);
+        if (updRect.GetArea() <= 0)
 diff --git a/rts/Map/ReadMap.cpp b/rts/Map/ReadMap.cpp
 index 53f4ffc19e..509637f544 100644
 --- a/rts/Map/ReadMap.cpp
 +++ b/rts/Map/ReadMap.cpp
 @@ -533,6 +533,8 @@ void CReadMap::UpdateHeightMapSynced(const SRectangle& hgtMapRect, bool firstCal
- 	const SRectangle centerRect = {std::max(mins.x, 0), std::max(mins.y, 0),  std::min(maxs.x, mapDims.mapxm1),  std::min(maxs.y, mapDims.mapym1)};
- 	const SRectangle cornerRect = {std::max(mins.x, 0), std::max(mins.y, 0),  std::min(maxs.x, mapDims.mapx  ),  std::min(maxs.y, mapDims.mapy  )};
+        const SRectangle centerRect = {std::max(mins.x, 0), std::max(mins.y, 0),  std::min(maxs.x, mapDims.mapxm1),  std::min(maxs.y, mapDims.mapym1)};
+        const SRectangle cornerRect = {std::max(mins.x, 0), std::max(mins.y, 0),  std::min(maxs.x, mapDims.mapx  ),  std::min(maxs.y, mapDims.mapy  )};
  
-+	LOG_L(L_WARNING, "UpdateHeightMapSynced %d %d %d %d", cornerRect.x1, cornerRect.y1, cornerRect.x2, cornerRect.y2);
++       LOG_L(L_WARNING, "UpdateHeightMapSynced %d %d %d %d", cornerRect.x1, cornerRect.y1, cornerRect.x2, cornerRect.y2);
 +
- 	UpdateCenterHeightmap(centerRect, firstCall);
- 	UpdateMipHeightmaps(centerRect, firstCall);
- 	UpdateFaceNormals(centerRect, firstCall);
+        UpdateCenterHeightmap(centerRect, firstCall);
+        UpdateMipHeightmaps(centerRect, firstCall);
+        UpdateFaceNormals(centerRect, firstCall);
+diff --git a/rts/Map/SMF/SMFReadMap.cpp b/rts/Map/SMF/SMFReadMap.cpp
+index 4b007810a9..fac39ef4aa 100644
+--- a/rts/Map/SMF/SMFReadMap.cpp
++++ b/rts/Map/SMF/SMFReadMap.cpp
+@@ -449,6 +449,7 @@ void CSMFReadMap::CreateShadingGL()
+ void CSMFReadMap::UpdateHeightMapUnsynced(const SRectangle& update)
+ {
+        RECOIL_DETAILED_TRACY_ZONE;
++       LOG_L(L_WARNING, "UpdateHeightMapUnsynced %d %d %d %d", update.x1, update.y1, update.x2, update.y2);
+        UpdateCornerHeightMapUnsynced(update);
+        UpdateHeightMapTexture(update);
+        UpdateHeightBoundsUnsynced(update);
